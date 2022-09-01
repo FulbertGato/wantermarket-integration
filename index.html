@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wanter Market</title>
+    <link rel="stylesheet" href="css/tailwind.css" />
+
+    <!-- AlpineJS -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Slick Carousal -->
+    <script defer src="/src/slick-1.8.1/slick/slick.min.js"></script>
+    <link rel="stylesheet" href="/src/slick-1.8.1/slick/slick-theme.css">
+    <link rel="stylesheet" href="/src/slick-1.8.1/slick/slick.css">
+    <!-- Jquery -->
+    <script src="js/jquery.min.js"></script>
+
+</head>
+
+<body class="lg:pt-72">
+    <!-- Header -->
+    <header class="lg:fixed top-0 left-0 w-full z-10 bg-white">
+        <div class="container">
+            <div class="py-4 lg:py-12 flex justify-between items-center gap-10">
+                <!-- Header Logo -->
+                <div class="mr-20">
+                    <img class="h-20 lg:h-24" src="assets/images/Logo.png" alt="" />
+                </div>
+
+                <!-- Header Search Bar -->
+                <div class="grow hidden lg:flex">
+                    <form class="border rounded-lg grow flex items-center py-5 px-8">
+                        <input class="focus:outline-none grow" type="search"
+                            placeholder="Rechercher un produit ou service" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </form>
+                </div>
+
+                <!-- Header Icons -->
+                <div class="hidden lg:flex items-center gap-6">
+                    <span class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                        <span
+                            class="inline-block absolute py-[1px] px-[4px] bg-black text-white rounded-full text-xs font-semibold bottom-0 right-0">0</span>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-10 h-10">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    <button class="rounded-full border-none py-6 px-7 leading-none bg-primary text-white font-bold">
+                        + Publier un produit
+                    </button>
+                    <div x-data="{dropdown: false}" class="relative">
+                        <label @click="dropdown=!dropdown" class="cursor-pointer flex gap-4 items-center">
+                            <span class="h-16 w-16 inline-block">
+                                <img src="assets/images/senegal-flag.png" alt=""
+                                    class="h-full w-full rounded-full object-cover" />
+                            </span>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+                        </label>
+                        <span x-cloak x-show="dropdown" x-transition
+                            class="inline-block p-3 rounded-lg bg-white shadow absolute z-10 w-60 top-[130%] right-0">
+                            <ul>
+                                <li class="cursor-pointer rounded p-2 border-b hover:bg-primary hover:text-white">
+                                    <a>French 🇸🇳</a>
+                                </li>
+                                <li class="cursor-pointer rounded p-2 hover:bg-primary hover:text-white"><a>English
+                                        🇺🇸</a></li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu -->
+                <div x-data="{navShow: false}" class="lg:hidden">
+                    <span @click="navShow=true" class="cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-12 h-12">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </span>
+
+                    <!-- Mobile Backdrop -->
+                    <div x-cloak @click="navShow=false" x-show="navShow"
+                        class="fixed top-0 left-0 w-full h-screen bg-black/50 z-10">
+
+                    </div>
+
+                    <!-- Mobile Sidebar -->
+                    <div x-cloak x-transition x-show="navShow"
+                        class="fixed top-0 left-0 h-screen w-[300px] bg-white z-20 px-4 py-8">
+
+                        <div class="flex">
+                            <form class="border rounded-lg grow flex items-center py-5 px-8">
+                                <input class="focus:outline-none grow" type="search"
+                                    placeholder="Rechercher un produit ou service" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                </svg>
+                            </form>
+                        </div>
+                        <ul class="flex flex-col gap-4 font-semibold text-lg mt-4">
+                            <li class="py-2 px-6 bg-gray-200 rounded-lg">Profile</li>
+                            <li class="py-2 px-6 bg-gray-200 rounded-lg">Likes</li>
+                            <li class="py-2 px-6 bg-gray-200 rounded-lg">Item 3</li>
+                            <li class="py-2 px-6 bg-gray-200 rounded-lg">Item 4</li>
+                        </ul>
+                        <button
+                            class="rounded-full border-none py-6 px-7 leading-none bg-primary text-white font-bold mt-4">
+                            + Publier un produit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="h-[1px] bg-gray-200"></div>
+        <div class="container">
+            <div class="py-4 flex items-center justify-between">
+                <div x-data="{dropdown: false}" class="relative">
+                    <button @click="dropdown=!dropdown"
+                        class="border rounded-full border-primary py-2 pl-8 px-3 leading-none flex items-center gap-10">
+                        <span class="text-tiny">Toutes les categories</span><span
+                            class="bg-primary rounded-full h-10 w-10 flex items-center justify-center text-white"><svg
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg></span>
+                    </button>
+                    <span x-cloak x-show="dropdown" x-transition
+                        class="inline-block p-3 rounded-lg bg-white shadow absolute z-10 w-full top-[130%]">
+                        <ul>
+                            <li class="rounded p-2 border-b hover:bg-primary hover:text-white">Item 1</li>
+                            <li class="rounded p-2 border-b hover:bg-primary hover:text-white">Item 2</li>
+                            <li class="rounded p-2 hover:bg-primary hover:text-white">Item 3</li>
+                        </ul>
+                    </span>
+                </div>
+                <div class="hidden lg:flex gap-4">
+                    <span class="font-bold italic">Top Categories :</span>
+                    <ul class="flex gap-2 items-center">
+                        <li>Agro Alimentaire</li>
+                        <li>Telephone et Tablette</li>
+                        <li>Electronique</li>
+                        <li>Automobile</li>
+                        <li>Mode et Beaute</li>
+                    </ul>
+                </div>
+                <button class="border rounded-full border-primary py-2 pl-3 pr-8 leading-none flex items-center gap-4">
+                    <span class="rounded-full h-10 w-10 flex items-center justify-center text-primary"><svg
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                    </span>
+                    <span class="text-tiny text-lg font-bold text-primary">Boutiques</span>
+                </button>
+            </div>
+            <div class="flex lg:hidden gap-4 py-4 whitespace-nowrap overflow-auto">
+                <span class="font-bold italic">Top Categories :</span>
+                <ul class="flex gap-2 items-center">
+                    <li>Agro Alimentaire</li>
+                    <li>Telephone et Tablette</li>
+                    <li>Electronique</li>
+                    <li>Automobile</li>
+                    <li>Mode et Beaute</li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section Hero -->
+    <section class="section-hero">
+
+        <div class="container">
+            <div class="hero-slider">
+                <div>
+                    <div class="max-w-5xl m-auto">
+                        <h6 class="text-lg font-bold">Edition Limitee</h6>
+                        <p class="mt-14 text-4xl">Profitez de cette paire de chaussure
+                            de AMAMA Boutique de qualite
+                            pour juste 53.000 F CFA</p>
+                        <button class="bg-primary text-white py-4 px-12 rounded-lg mt-20">Acheter</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="max-w-5xl m-auto">
+                        <h6 class="text-lg font-bold">Edition Limitee</h6>
+                        <p class="mt-14 text-4xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea aliquid
+                            deleniti nisi, vero provident ipsa?</p>
+                        <button class="bg-primary text-white py-4 px-12 rounded-lg mt-20">Acheter</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="max-w-5xl m-auto">
+                        <h6 class="text-lg font-bold">Edition Limitee</h6>
+                        <p class="mt-14 text-4xl">Profitez de cette paire de chaussure
+                            de AMAMA Boutique de qualite
+                            pour juste 53.000 F CFA</p>
+                        <button class="bg-primary text-white py-4 px-12 rounded-lg mt-20">Acheter</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Boutiques Exclusives -->
+    <section class="mt-12">
+        <div class="container">
+            <h2 class="text-3xl font-bold heading-after">Boutiques Exclusives</h2>
+            <div class="boutique-slider mt-14">
+                <div>
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6 m-2">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6 m-2">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6 m-2">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6 m-2">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6 m-2">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Categories -->
+    <section class="py-14">
+        <div class="container">
+            <h2 class="text-3xl font-bold heading-after">
+                Vos produits par categorie
+            </h2>
+            <!-- Card Grid -->
+            <div x-data="" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-14">
+                <template x-for="i in 8">
+                    <!-- Card -->
+                    <div
+                        class="bg-blue-200 card-category hover:bg-primary hover:text-white duration-100 p-10 flex flex-col items-center">
+                        <svg width="29" height="37" viewBox="0 0 29 37" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path  d="M26.7497 0.216125C27.2497 0.216191 27.7324 0.399786 28.1061 0.732086C28.4798 1.06439 28.7185 1.52228 28.7771 2.01892L28.7913 2.25779V34.9245C28.7908 35.4448 28.5915 35.9454 28.2343 36.3238C27.877 36.7021 27.3888 36.9299 26.8693 36.9604C26.3498 36.9908 25.8383 36.8218 25.4393 36.4878C25.0402 36.1538 24.7838 35.6801 24.7223 35.1633L24.708 34.9245V24.7161H22.6663C22.1663 24.7161 21.6836 24.5325 21.3099 24.2002C20.9362 23.8679 20.6975 23.41 20.639 22.9133L20.6247 22.6745V10.4245C20.6247 5.91238 23.6872 0.216125 26.7497 0.216125ZM14.4997 0.216125C14.9997 0.216191 15.4824 0.399786 15.8561 0.732086C16.2298 1.06439 16.4685 1.52228 16.5271 2.01892L16.5413 2.25779V12.4661C16.5411 14.2768 15.9394 16.0361 14.8308 17.4678C13.7221 18.8994 12.1694 19.9222 10.4163 20.3755V34.9245C10.4158 35.4448 10.2165 35.9454 9.85928 36.3238C9.50205 36.7021 9.01381 36.9299 8.49433 36.9604C7.97484 36.9908 7.46332 36.8218 7.06427 36.4878C6.66522 36.1538 6.40876 35.6801 6.3473 35.1633L6.33301 34.9245V20.3755C4.64956 19.9403 3.14884 18.9794 2.04911 17.6326C0.94938 16.2857 0.307989 14.6232 0.218216 12.8867L0.208008 12.4661V2.25779C0.208585 1.73741 0.407844 1.23689 0.765073 0.858499C1.1223 0.480104 1.61054 0.252396 2.13002 0.221899C2.64951 0.191402 3.16103 0.360419 3.56008 0.694416C3.95913 1.02841 4.21559 1.50218 4.27705 2.01892L4.29134 2.25779V12.4661C4.29136 13.1829 4.48004 13.887 4.83843 14.5077C5.19682 15.1285 5.71228 15.6439 6.33301 16.0023V2.25779C6.33359 1.73741 6.53284 1.23689 6.89007 0.858499C7.2473 0.480104 7.73554 0.252396 8.25502 0.221899C8.77451 0.191402 9.28603 0.360419 9.68508 0.694416C10.0841 1.02841 10.3406 1.50218 10.4021 2.01892L10.4163 2.25779L10.4184 16.0023C10.9881 15.673 11.4698 15.2108 11.8225 14.6552C12.1751 14.0995 12.3883 13.4669 12.4437 12.8112L12.458 12.4661V2.25779C12.458 1.71631 12.6731 1.197 13.056 0.814116C13.4389 0.431229 13.9582 0.216125 14.4997 0.216125Z" />
+                        </svg>
+                        <h6 class="font-semibold text-2xl">Category X</h6>
+                        <p>4 Items</p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section>
+        <div class="container">
+            <h2 class="text-3xl font-bold text-center">
+                Profitez de produits de qualite chez Wanter Market !
+            </h2>
+            <div x-data="{tab1: true, tab2: false}">
+                <div class="flex justify-center">
+                    <div class="rounded overflow-hidden shadow font-bold mt-12">
+                        <button @click="tab1 = true; tab2= false;" :class="tab1? 'bg-primary text-white' : '' "
+                            class="p-5 px-6">
+                            Annonces Pro
+                        </button>
+                        <button @click="tab1 = false; tab2= true;" :class="tab2? 'bg-primary text-white' : '' "
+                            class="p-5">
+                            En Promotion
+                        </button>
+                    </div>
+                </div>
+                <div x-show="tab1" id="product-tab-1"
+                    class="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Product Cards -->
+                    <template x-for="i in 8">
+                        <!-- Card -->
+                        <div class="border bg-white hover:shadow-lg duration-100 cursor-pointer rounded">
+                            <div class="h-[250px] bg-red-100 relative">
+                                <img class="h-full w-full object-cover" src="assets/images/shirt.png" alt="" />
+                                <span class="bg-white/75 rounded p-4 text-primary absolute top-2 right-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+
+                                </span>
+                            </div>
+                            <div class="p-7">
+                                <h5 class="font-black text-3xl text-primary">150000 F CFA</h5>
+                                <h6 class="font-semibold mt-2">
+                                    Article qui tient sur plusieurs lignes par exemple.
+                                </h6>
+                                <div class="flex gap-2 items-center my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Dakar, Senegal</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                    </svg>
+                                    <span>Bamba Ndiaye</span>
+                                </div>
+                                <div class="flex gap-4 mt-6">
+                                    <button
+                                        class="border border-primary rounded-lg text-primary font-semibold grow flex gap-4 items-center px-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-6 h-6">
+                                            <path fill-rule="evenodd"
+                                                d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                        <span>Contacter le vendeur</span>
+                                    </button>
+                                    <div
+                                        class="h-16 w-16 rounded-lg bg-gray-200 flex justify-center items-center text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-8 h-8">
+                                            <path fill-rule="evenodd"
+                                                d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div x-show="tab2" id="product-tab-2"
+                    class="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Product Cards -->
+                    <template x-for="i in 8">
+                        <!-- Card -->
+                        <div class="border bg-white hover:shadow-lg duration-100 cursor-pointer rounded">
+                            <div class="h-[250px] bg-red-100 relative">
+                                <img class="h-full w-full object-cover" src="assets/images/shirt.png" alt="" />
+                                <span class="bg-white/75 rounded p-4 text-primary absolute top-2 right-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+
+                                </span>
+                            </div>
+                            <div class="p-7">
+                                <h5 class="font-black text-3xl text-primary">150000 J CFA</h5>
+                                <h6 class="font-semibold mt-2">
+                                    Article qui tient sur plusieurs lignes par exemple.
+                                </h6>
+                                <div class="flex gap-2 items-center my-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Dakar, Senegal</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                    </svg>
+                                    <span>Bamba Ndiaye</span>
+                                </div>
+                                <div class="flex gap-4 mt-6">
+                                    <button
+                                        class="border border-primary rounded-lg text-primary font-semibold grow flex gap-4 items-center px-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-6 h-6">
+                                            <path fill-rule="evenodd"
+                                                d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+
+                                        <span>Contacter le vendeur</span>
+                                    </button>
+                                    <div
+                                        class="h-16 w-16 rounded-lg bg-gray-200 flex justify-center items-center text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-8 h-8">
+                                            <path fill-rule="evenodd"
+                                                d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button class="bg-primary text-white py-6 px-12 rounded-lg font-bold mt-12">
+                    Plus d’articles
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner -->
+    <img class="w-full mt-16" src="assets/images/banner.png" alt="" />
+
+    <!-- Top Vendeurs -->
+    <section class="pt-16 pb-12">
+        <div class="container">
+            <h2 class="text-3xl font-bold heading-after">Top Vendeurs</h2>
+            <div x-data="" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-14">
+                <template x-for="i in 8">
+                    <!-- Card -->
+                    <div class="border rounded p-8 flex gap-6">
+                        <div class="w-48 h-48 bg-red-100 shrink-0">
+                            <img class="h-full w-full object-cover" src="assets/images/boutique-img.png" alt="" />
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <h6 class="font-semibold mb-2">
+                                Nom de la boutique en deux lignes
+                            </h6>
+                            <div class="text-tiny">
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg role="img" viewBox="0 0 24 24" class="w-6 h-6"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <title>WhatsApp</title>
+                                        <path
+                                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                    </svg><span>Whatsapp</span>
+                                </div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                    </svg>
+                                    <span>Voir le numero</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    </svg>
+                                    <span>Voir sur la carte</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section -->
+    <section class="bg-[#F5F7FA] py-16">
+        <div class="container">
+            <div class="flex items-center justify-between text-3xl">
+                <h2 class="font-bold heading-after">Nouveautés</h2>
+                <div class="flex gap-4 items-center">
+                    <span class="font-semibold">Voir plus</span>
+                    <span class="text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-10 h-10">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div x-data="" class="mt-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Product Cards -->
+                <template x-for="i in 16">
+                    <!-- Card -->
+                    <div class="border bg-white hover:shadow-lg duration-100 cursor-pointer rounded">
+                        <div class="h-[250px] bg-red-100 relative">
+                            <img class="h-full w-full object-cover" src="assets/images/shirt.png" alt="" />
+                            <span class="bg-white/75 rounded p-4 text-primary absolute top-2 right-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                </svg>
+
+                            </span>
+                        </div>
+                        <div class="p-7">
+                            <h5 class="font-black text-3xl text-primary">150000 F CFA</h5>
+                            <h6 class="font-semibold mt-2">
+                                Article qui tient sur plusieurs lignes par exemple.
+                            </h6>
+                            <div class="flex gap-2 items-center my-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                <span>Dakar, Senegal</span>
+                            </div>
+                            <div class="flex gap-2 items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                                <span>Bamba Ndiaye</span>
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button
+                                    class="border border-primary rounded-lg text-primary font-semibold grow flex gap-4 items-center px-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-6 h-6">
+                                        <path fill-rule="evenodd"
+                                            d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+
+                                    <span>Contacter le vendeur</span>
+                                </button>
+                                <div
+                                    class="h-16 w-16 rounded-lg bg-gray-200 flex justify-center items-center text-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-8 h-8">
+                                        <path fill-rule="evenodd"
+                                            d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="flex justify-center">
+                <button class="bg-primary text-white py-6 px-12 rounded-lg font-bold mt-12">
+                    Plus d’articles
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-32">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex gap-8">
+                        <svg class="h-20 w-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <path
+                                d="M191.1 224c0-17.72-14.34-32.04-32-32.04L144 192c-35.34 0-64 28.66-64 64.08v47.79C80 339.3 108.7 368 144 368H160c17.66 0 32-14.36 32-32.06L191.1 224zM256 0C112.9 0 4.583 119.1 .0208 256L0 296C0 309.3 10.75 320 23.1 320S48 309.3 48 296V256c0-114.7 93.34-207.8 208-207.8C370.7 48.2 464 141.3 464 256v144c0 22.09-17.91 40-40 40h-110.7C305 425.7 289.7 416 272 416H241.8c-23.21 0-44.5 15.69-48.87 38.49C187 485.2 210.4 512 239.1 512H272c17.72 0 33.03-9.711 41.34-24H424c48.6 0 88-39.4 88-88V256C507.4 119.1 399.1 0 256 0zM368 368c35.34 0 64-28.7 64-64.13V256.1C432 220.7 403.3 192 368 192l-16 0c-17.66 0-32 14.34-32 32.04L320 335.9C320 353.7 334.3 368 352 368H368z" />
+                        </svg>
+                        <div>
+                            <h6 class="text-lg font-black">CONTACTEZ-NOUS 24/7</h6>
+                            <h6 class="text-2xl font-black my-4">+221 77 110 02 02</h6>
+                            <ul class="text-lg flex flex-col gap-4">
+                                <li>contact@wantermarket.sn</li>
+                                <li>Rue 11, Fass Delorme, Dakar Seenegal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="text-lg font-bold mb-6">RACCOURCIS</h6>
+                    <ul class="flex flex-col gap-4">
+                        <li>Agroalimentaire</li>
+                        <li>Materiaux et Equipements</li>
+                        <li>Mode et beaute</li>
+                        <li>Meubles et Decorations</li>
+                        <li>Immobilier</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-lg font-bold mb-6">RACCOURCIS</h6>
+                    <ul class="flex flex-col gap-4">
+                        <li>Electromenager</li>
+                        <li>Electronique</li>
+                        <li>Telephone et Tablette</li>
+                        <li>Automobile</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-lg font-bold mb-6">NAVIGATION</h6>
+                    <ul class="flex flex-col gap-4">
+                        <li>Les boutiques</li>
+                        <li>Devenir</li>
+                        <li>Connexion</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-center text-lg font-bold mt-40 mb-16">
+                En utilisant nos services, vous acceptez nos
+                <span class="text-primary"> Règles et Conditions d’Utilisation </span>. Les données que vous nous
+                transmettez sont protégées, pour plus
+                d’informations veuillez consulter notre
+                <span class="text-primary"> Politiques de Confidentialité </span>.
+            </p>
+        </div>
+        <div class="bg-primary text-white py-16">
+            <div class="container">
+                <div class="flex justify-center md:justify-between flex-wrap text-center md:text-right">
+                    <div>Copyright © 2022 Wanter Market. All rights reserved.</div>
+                    <div>Développé par AGENCE CAURIS</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script src="js/app.js"></script>
+
+</html>
